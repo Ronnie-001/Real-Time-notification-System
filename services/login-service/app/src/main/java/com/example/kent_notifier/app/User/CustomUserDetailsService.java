@@ -1,9 +1,11 @@
-package com.example.kent_notifier.app.user;
+package com.example.kent_notifier.app.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import com.example.kent_notifier.app.User.Model.*;
 
 public class CustomUserDetailsService implements UserDetailsService {
     
@@ -25,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (user == null) throw new EmailNotFoundException("Email address not found");
 
-        UserDetailsImpl userDetails = new UserDetailsImpl(user.getEmailAddress(), user.getPassword(), user.getRole());
+        UserDetailsImpl userDetails = new UserDetailsImpl(user.getEmailAddress(), user.getPassword(), user.getRoles());
         return userDetails;
     } 
 }

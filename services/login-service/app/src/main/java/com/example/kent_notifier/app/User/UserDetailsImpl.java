@@ -1,4 +1,6 @@
-package com.example.kent_notifier.app.user;
+package com.example.kent_notifier.app.User;
+
+import com.example.kent_notifier.app.Role.Model.Role;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class UserDetailsImpl implements UserDetails {
     
@@ -19,13 +22,13 @@ public class UserDetailsImpl implements UserDetails {
     private String emailAddress;
 
     private String password;
+    
+    private HashSet<Role> roles;
 
-    private Role role; 
-
-    public UserDetailsImpl(String emailAddress, String password, Role role) {
+    public UserDetailsImpl(String emailAddress, String password, HashSet<Role> roles) {
         this.emailAddress = emailAddress;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
     }
     
     public String getEmailAddress() {
@@ -37,14 +40,17 @@ public class UserDetailsImpl implements UserDetails {
         return this.password;
     }
 
-    public Role getRole() {
-        return this.role;
+    public HashSet<Role> getRoles() {
+        return this.roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<>();
-        list.add(new SimpleGrantedAuthority(ROLE_PREFIX + this.getRole()));
+
+        for (Role role : this.getRoles()) {
+            list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+        }
 
         return list;
     }

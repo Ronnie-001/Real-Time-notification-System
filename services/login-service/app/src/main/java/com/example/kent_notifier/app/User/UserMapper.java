@@ -1,7 +1,9 @@
-package com.example.kent_notifier.app.user;
+package com.example.kent_notifier.app.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.example.kent_notifier.app.User.Model.User;
 
 public class UserMapper {
     
@@ -12,7 +14,7 @@ public class UserMapper {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public User toEntity(UserDTO userDTO, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public static User toEntity(UserDTO userDTO, BCryptPasswordEncoder bCryptPasswordEncoder) {
         if (userDTO == null) return null;
 
         User user = new User();

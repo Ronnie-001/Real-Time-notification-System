@@ -1,4 +1,4 @@
-package com.example.kent_notifier.app.user;
+package com.example.kent_notifier.app.User;
 
 import lombok.ToString;
 
@@ -6,6 +6,7 @@ import lombok.ToString;
 public class UserDTO {
     
     private String emailAddress;
+
     private String password;
     
     public void setemailAddress(String newUsername) {

@@ -1,6 +1,10 @@
-package com.example.kent_notifier.app.user;
+package com.example.kent_notifier.app.User.Model;
+
+import com.example.kent_notifier.app.Role.Model.Role;
 
 import jakarta.persistence.*;
+
+import java.util.HashSet;
 
 @Entity
 @Table(name = "users")
@@ -15,12 +19,17 @@ public class User {
     
     @Column(name = "password", nullable = false)
     private String password; 
-
-    @Column(name = "role")
-    private Role role;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    ) 
+    private HashSet<Role> roles = new HashSet<>();
 
     public User() {}
-
+    
     public void setPassword(String newPassword) {
         this.password = newPassword;
     }
@@ -29,8 +38,8 @@ public class User {
         this.emailAddress = newEmailAddress;
     }
 
-    public void setRole(Role newRole) {
-        this.role = newRole;
+    public void addRole(Role newRole) {
+        this.roles.add(newRole);
     }
 
     public String getPassword() {
@@ -41,7 +50,7 @@ public class User {
         return this.emailAddress;
     }
     
-    public Role getRole() {
-        return this.role;
+    public HashSet<Role> getRoles() {
+        return this.roles;
     }
 }
