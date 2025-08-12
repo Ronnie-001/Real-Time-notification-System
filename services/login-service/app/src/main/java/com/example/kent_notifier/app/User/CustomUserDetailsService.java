@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.example.kent_notifier.app.User.Model.*;
+import com.example.kent_notifier.app.User.Repository.*;
 
 public class CustomUserDetailsService implements UserDetailsService {
     

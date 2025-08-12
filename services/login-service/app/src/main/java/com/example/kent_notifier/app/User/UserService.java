@@ -1,8 +1,5 @@
 package com.example.kent_notifier.app.User;
 
-import com.example.kent_notifier.app.Role.Model.Role;
-import com.example.kent_notifier.app.Role.ERole;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 
 import com.example.kent_notifier.app.User.Model.*;
+import com.example.kent_notifier.app.Role.Model.Role;
+import com.example.kent_notifier.app.Role.ERole;
+import com.example.kent_notifier.app.User.Repository.*;
 
 @Service
 public class UserService {
@@ -23,12 +23,12 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void registerNewUser(UserDTO userDto) {
-        User user = UserMapper.toEntity(userDto, bCryptPasswordEncoder);
+    public void registerNewUser(SigninCredentials signinCredentials) {
+        User user = UserMapper.toEntity(signinCredentials, bCryptPasswordEncoder);
 
-        // add roles
         HashSet<Role> roles = new HashSet<>();
 
+        // search role repository to find roles
         Role role = new Role();
         role.setRoleName(ERole.USER);
 
