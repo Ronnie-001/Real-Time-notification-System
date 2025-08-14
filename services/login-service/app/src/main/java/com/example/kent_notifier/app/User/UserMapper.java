@@ -3,6 +3,7 @@ package com.example.kent_notifier.app.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.example.kent_notifier.app.User.DTO.SignupRequestDTO;
 import com.example.kent_notifier.app.User.Model.*;
 
 public class UserMapper {
@@ -14,13 +15,13 @@ public class UserMapper {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public static User toEntity(SigninCredentials signinCredentials, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        if (signinCredentials == null) return null;
+    public static User toEntity(SignupRequestDTO signupRequestDTO, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        if (signupRequestDTO == null) return null;
 
         User user = new User();
 
-        user.setEmailAddress(signinCredentials.getEmailAddress());
-        user.setPassword(bCryptPasswordEncoder.encode(signinCredentials.getPassword()));
+        user.setEmailAddress(signupRequestDTO.getEmailAddress());
+        user.setPassword(bCryptPasswordEncoder.encode(signupRequestDTO.getPassword()));
 
         return user;
     }

@@ -60,6 +60,16 @@ public class JwtUtils {
         return email;
     }
 
+    public Date getExpirationTimeFromJwt(String jwt) {
+        Date time = Jwts.parser()
+                        .verifyWith(getKey()).build()
+                        .parseSignedClaims(jwt)
+                        .getPayload()
+                        .getExpiration();
+
+        return time;
+    }
+
     public boolean validateJwtToken(String token) {
         try {
             Jwts.parser().verifyWith(getKey()).build().parse(token);

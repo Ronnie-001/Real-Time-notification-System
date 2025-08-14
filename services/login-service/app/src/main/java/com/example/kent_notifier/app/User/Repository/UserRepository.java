@@ -10,4 +10,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
     
     // emails are made unique, only one method needed to grab a user from Postgres.
     User findByEmail(String emailAddress); 
+
+    boolean emailExists(String emailAddress);
 }

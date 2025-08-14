@@ -1,6 +1,6 @@
-package com.example.kent_notifier.app.User.Model;
+package com.example.kent_notifier.app.User.DTO;
 
-public class SigninCredentials {
+public class SignupRequestDTO {
     
     private String email;
 

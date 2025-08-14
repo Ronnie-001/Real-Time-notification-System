@@ -38,16 +38,18 @@ public class User {
         this.emailAddress = newEmailAddress;
     }
 
-    public void addRole(Role newRole) {
-        this.roles.add(newRole);
-    }
-
     public String getPassword() {
         return this.password;
     }
 
     public String getEmailAddress() {
         return this.emailAddress;
+    }
+
+    public void setRoles(HashSet<Role> rolesToAdd) {
+        for (Role role : rolesToAdd) {
+            this.roles.add(role);
+        } 
     }
     
     public HashSet<Role> getRoles() {

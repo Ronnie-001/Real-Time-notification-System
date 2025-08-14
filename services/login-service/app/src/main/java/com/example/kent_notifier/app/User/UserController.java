@@ -1,19 +1,57 @@
 package com.example.kent_notifier.app.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.kent_notifier.app.User.Model.SigninCredentials;
+import com.example.kent_notifier.app.User.Model.User;
+import com.example.kent_notifier.app.User.Repository.*;
+import com.example.kent_notifier.app.Security.JWT.JwtUtils;
+import com.example.kent_notifier.app.User.DTO.*;
 
 @Controller
 public class UserController {
     
+    private final UserRepository userRepository;
+    
+    private final UserService userService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtils jwtUtils;
+    
+    @Autowired
+    public UserController(UserRepository userRepository, UserService userService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+    }
+    
     @PostMapping("login-service/auth/v1/signup")
-    public ResponseEntity signUp(@RequestBody SigninCredentials signinCredentials) {
-        // check if the email already exists within the userRepository
+    public ResponseEntity<String> signUp(@RequestBody SignupRequestDTO signupRequestDTO) {
+        User user = userService.createUser(signupRequestDTO);
         
-        // create the user
+        userRepository.save(user);
+        return new ResponseEntity<String>("User sucessfully created!", HttpStatus.CREATED); 
+    }
+
+    @PostMapping("login-service/auth/v1/login")
+    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginRequestDTO loginRequestDTO) {
+        Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmailAddress(), loginRequestDTO.getPassword()));
+       
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+         
     }
 }

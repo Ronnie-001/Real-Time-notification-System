@@ -10,31 +10,33 @@ import com.example.kent_notifier.app.User.Model.*;
 import com.example.kent_notifier.app.Role.Model.Role;
 import com.example.kent_notifier.app.Role.ERole;
 import com.example.kent_notifier.app.User.Repository.*;
+import com.example.kent_notifier.app.User.DTO.*;
 
 @Service
 public class UserService {
-    
-    private final UserRepository userRepository;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleRepository = roleRepository;
     }
 
-    public void registerNewUser(SigninCredentials signinCredentials) {
-        User user = UserMapper.toEntity(signinCredentials, bCryptPasswordEncoder);
-
-        HashSet<Role> roles = new HashSet<>();
+    public User createUser(SignupRequestDTO signupRequestDTO) {
+        User user = UserMapper.toEntity(signupRequestDTO, bCryptPasswordEncoder);
 
         // search role repository to find roles
-        Role role = new Role();
-        role.setRoleName(ERole.USER);
+        Role role = roleRepository.findRolebyName(ERole.USER)
+                    .orElseThrow(() -> new RuntimeException("ERROR: Role not found.")); 
 
+        HashSet<Role> roles = new HashSet<>();
         roles.add(role);
 
-        // save to database;
-        userRepository.save(user);        
+        user.setRoles(roles); 
+        
+        return user; 
     }
 }
