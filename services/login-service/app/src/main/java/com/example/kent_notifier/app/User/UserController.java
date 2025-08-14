@@ -1,5 +1,6 @@
 package com.example.kent_notifier.app.User;
 
+import org.aspectj.apache.bcel.generic.LOOKUPSWITCH;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,11 @@ public class UserController {
        
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-         
+        LoginResponseDTO response = new LoginResponseDTO();
+
+        response.setToken(jwt);
+        response.setExpiration(jwtUtils.getExpirationTimeFromJwt(jwt).getTime());
+        
+        return  ResponseEntity.ok(response);
     }
 }

@@ -14,8 +14,8 @@ public class LoginResponseDTO {
         return this.expirationTime;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setToken(String jwt) {
+        this.token = jwt;
     }
 
     public void setExpiration(Long expiration) {
