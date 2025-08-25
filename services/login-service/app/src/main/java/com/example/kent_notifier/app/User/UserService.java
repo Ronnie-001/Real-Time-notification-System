@@ -29,14 +29,15 @@ public class UserService {
         User user = UserMapper.toEntity(signupRequestDTO, bCryptPasswordEncoder);
 
         // search role repository to find roles
-        Role role = roleRepository.findRolebyName(ERole.USER)
+        Role role = roleRepository.findByName(ERole.USER)
                     .orElseThrow(() -> new RuntimeException("ERROR: Role not found.")); 
+
+        System.out.println("It's this ->>> " + role.getRoleName());
 
         HashSet<Role> roles = new HashSet<>();
         roles.add(role);
 
         user.setRoles(roles); 
-        
         return user; 
     }
 }

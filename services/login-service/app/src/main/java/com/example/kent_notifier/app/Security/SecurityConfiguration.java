@@ -27,8 +27,9 @@ import com.example.kent_notifier.app.User.CustomUserDetailsService;
 public class SecurityConfiguration {
     
     @Autowired
-    CustomUserDetailsService customUserDetailsService;
-
+    private CustomUserDetailsService customUserDetailsService;
+    
+    @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -54,12 +55,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("api/v1/**").permitAll()
+                .requestMatchers("/home").permitAll()
+                .requestMatchers("/login-service/auth/v1/**").permitAll()
                 .anyRequest().authenticated()
             );
 
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

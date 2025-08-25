@@ -20,7 +20,7 @@ public class UserMapper {
 
         User user = new User();
 
-        user.setEmailAddress(signupRequestDTO.getEmailAddress());
+        user.setEmail(signupRequestDTO.getEmailAddress());
         user.setPassword(bCryptPasswordEncoder.encode(signupRequestDTO.getPassword()));
 
         return user;

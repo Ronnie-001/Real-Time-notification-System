@@ -4,18 +4,18 @@ import com.example.kent_notifier.app.Role.Model.Role;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User { 
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name = "email", nullable = false, unique = true)
-    private String emailAddress;
+    private String email;
     
     @Column(name = "password", nullable = false)
     private String password; 
@@ -26,7 +26,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     ) 
-    private HashSet<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User() {}
     
@@ -34,25 +34,25 @@ public class User {
         this.password = newPassword;
     }
 
-    public void setEmailAddress(String newEmailAddress) {
-        this.emailAddress = newEmailAddress;
+    public void setEmail(String newEmail) {
+        this.email = newEmail;
     }
 
     public String getPassword() {
         return this.password;
     }
 
-    public String getEmailAddress() {
-        return this.emailAddress;
+    public String getEmail() {
+        return this.email;
     }
 
-    public void setRoles(HashSet<Role> rolesToAdd) {
+    public void setRoles(Set<Role> rolesToAdd) {
         for (Role role : rolesToAdd) {
             this.roles.add(role);
         } 
     }
     
-    public HashSet<Role> getRoles() {
+    public Set<Role> getRoles() {
         return this.roles;
     }
 }

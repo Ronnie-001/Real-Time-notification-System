@@ -11,7 +11,5 @@ import com.example.kent_notifier.app.Role.Model.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>{
 
-    Optional<Role> findRolebyName(ERole roleName);  
-
-    boolean roleExists(ERole roleName);
+    Optional<Role> findByName(ERole roleName);  
 }

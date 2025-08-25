@@ -22,13 +22,13 @@ public class CustomUserDetailsService implements UserDetailsService {
        return null; 
     } 
 
-    public UserDetails loadUserByEmailAddress(String emailAddress) throws EmailNotFoundException{
-        
-        User user = userRepository.findByEmail(emailAddress);
+    public UserDetails loadUserByEmailAddress(String email) throws EmailNotFoundException{
+        User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("ERROR: User not found."));
 
         if (user == null) throw new EmailNotFoundException("Email address not found");
 
-        UserDetailsImpl userDetails = new UserDetailsImpl(user.getEmailAddress(), user.getPassword(), user.getRoles());
+        UserDetailsImpl userDetails = new UserDetailsImpl(user.getEmail(), user.getPassword(), user.getRoles());
         return userDetails;
     } 
 }

@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 
 public class UserDetailsImpl implements UserDetails {
     
@@ -19,20 +19,20 @@ public class UserDetailsImpl implements UserDetails {
     // fields of user.
     private Long id;
 
-    private String emailAddress;
+    private String email;
 
     private String password;
     
-    private HashSet<Role> roles;
+    private Set<Role> roles;
 
-    public UserDetailsImpl(String emailAddress, String password, HashSet<Role> roles) {
-        this.emailAddress = emailAddress;
+    public UserDetailsImpl(String email, String password, Set<Role> roles) {
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
     
-    public String getEmailAddress() {
-        return this.emailAddress;
+    public String getEmail() {
+        return this.email;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UserDetailsImpl implements UserDetails {
         return this.password;
     }
 
-    public HashSet<Role> getRoles() {
+    public Set<Role> getRoles() {
         return this.roles;
     }
 
@@ -49,7 +49,7 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> list = new ArrayList<>();
 
         for (Role role : this.getRoles()) {
-            list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+            list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getRoleName()));
         }
 
         return list;

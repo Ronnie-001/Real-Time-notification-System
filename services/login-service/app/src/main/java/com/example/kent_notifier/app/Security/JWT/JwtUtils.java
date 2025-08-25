@@ -25,17 +25,17 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("{kent-notifier.login.jwtSecret}")
+    @Value("${kent-notifier.login.jwtSecret}")
     private String jwtSecret;
     
-    @Value("{kent-notifier.login.jwtExpirationMs}")
+    @Value("${kent-notifier.login.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         
         String jwt = Jwts.builder()
-                .subject(userPrincipal.getEmailAddress())
+                .subject(userPrincipal.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getKey())
