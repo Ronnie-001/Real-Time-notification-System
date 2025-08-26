@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.kent_notifier.app.User.Model.User;
 import com.example.kent_notifier.app.User.Repository.*;
 import com.example.kent_notifier.app.Security.JWT.JwtUtils;
-import com.example.kent_notifier.app.User.DTO.*;
+
+import com.example.kent_notifier.app.User.DTO.LoginRequestDTO;
+import com.example.kent_notifier.app.User.DTO.LoginResponseDTO;
+import com.example.kent_notifier.app.User.DTO.SignupRequestDTO;
 
 @RestController
 public class UserController {
@@ -45,22 +49,25 @@ public class UserController {
     
     @PostMapping("/login-service/auth/v1/signup")
     public ResponseEntity<String> signUp(@RequestBody SignupRequestDTO signupRequestDTO) {
+        System.out.println("DEBUG: " + signupRequestDTO.getEmail());
+
         User user = userService.createUser(signupRequestDTO);
         userRepository.save(user);
+
         return new ResponseEntity<String>("User sucessfully created!", HttpStatus.CREATED); 
     }
 
     @PostMapping("/login-service/auth/v1/signin")
     public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginRequestDTO loginRequestDTO) {
         Authentication authentication = authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmailAddress(), loginRequestDTO.getPassword()));
+        .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
        
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         LoginResponseDTO response = new LoginResponseDTO();
 
         response.setToken(jwt);
-        response.setExpiration(jwtUtils.getExpirationTimeFromJwt(jwt).getTime());
+        response.setExpirationTime(jwtUtils.getExpirationTimeFromJwt(jwt).getTime());
         
         return ResponseEntity.ok(response);
     }

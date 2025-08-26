@@ -1,24 +1,11 @@
 package com.example.kent_notifier.app.User.DTO;
 
+import lombok.Data;
+
+@Data
 public class LoginResponseDTO {
 
     private String token;
 
     private Long expirationTime;
-
-    public String getToken() {
-        return this.token;
-    }
-
-    public Long getExpirationTime() {
-        return this.expirationTime;
-    }
-
-    public void setToken(String jwt) {
-        this.token = jwt;
-    }
-
-    public void setExpiration(Long expiration) {
-        this.expirationTime = expiration;
-    }
 }

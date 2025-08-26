@@ -56,8 +56,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        RequestMatcher authMatcher = PathPatternRequestMatcher.withDefaults()
-                                 .matcher(HttpMethod.POST, "/login-service/auth/v1/**");
+        RequestMatcher authMatcher = PathPatternRequestMatcher
+                                     .withDefaults()
+                                     .matcher(HttpMethod.POST, "/login-service/auth/v1/**");
 
         boolean isMatch = authMatcher.matches(request);
         return isMatch; 

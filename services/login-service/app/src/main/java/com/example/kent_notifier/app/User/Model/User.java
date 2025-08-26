@@ -5,6 +5,7 @@ import com.example.kent_notifier.app.Role.Model.Role;
 import jakarta.persistence.*;
 
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "users")
@@ -14,10 +15,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "user_email", nullable = false, unique = true)
     private String email;
     
-    @Column(name = "password", nullable = false)
+    @Column(name = "user_password", nullable = false)
     private String password; 
     
     @ManyToMany(fetch = FetchType.LAZY)
@@ -26,7 +27,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     ) 
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {}
     
