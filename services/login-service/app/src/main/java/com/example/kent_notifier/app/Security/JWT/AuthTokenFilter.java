@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.util.StringUtils;
 
 import com.example.kent_notifier.app.User.CustomUserDetailsService;
+import com.example.kent_notifier.app.User.Repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,16 +44,25 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String email = jwtUtils.getEmailFromJwt(jwt);
                 
-                UserDetails userDetails = customUserDetailsService.loadUserByEmailAddress(email);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));    
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                
+                // testing 
+                Authentication authe = SecurityContextHolder.getContext().getAuthentication();
+                System.out.println("DEBUG -----> " + authe.getAuthorities());
+
             }
 
         } catch (Exception e) {
             logger.error("Failed to set authentication: {} ", e);
         }
+
+
+        filterChain.doFilter(req, res);
     }
 
     @Override

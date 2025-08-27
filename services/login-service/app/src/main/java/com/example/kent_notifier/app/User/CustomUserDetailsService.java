@@ -18,24 +18,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
     
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       return null; 
-    } 
-
-    public UserDetails loadUserByEmailAddress(String email) throws EmailNotFoundException{
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
         .orElseThrow(() -> new RuntimeException("ERROR: User not found."));
 
-        if (user == null) throw new EmailNotFoundException("Email address not found");
+        if (user == null) throw new UsernameNotFoundException("Email address not found");
 
         UserDetailsImpl userDetails = new UserDetailsImpl(user.getEmail(), user.getPassword(), user.getRoles());
         return userDetails;
     } 
-}
-
-// create custom execption to handle no username being found
-class EmailNotFoundException extends Exception {
-    public EmailNotFoundException(String errorMessage) {
-        super(errorMessage);
-    }
 }

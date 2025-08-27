@@ -59,7 +59,6 @@ public class JwtUtils {
         
         return email;
     }
-
     public Date getExpirationTimeFromJwt(String jwt) {
         Date time = Jwts.parser()
                         .verifyWith(getKey()).build()
