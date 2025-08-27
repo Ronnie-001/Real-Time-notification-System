@@ -15,10 +15,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "user_email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     
-    @Column(name = "user_password", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password; 
     
     @ManyToMany(fetch = FetchType.LAZY)
@@ -27,6 +27,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     ) 
+
     private Set<Role> roles = new HashSet<>();
 
     public User() {}

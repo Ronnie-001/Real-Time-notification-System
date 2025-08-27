@@ -32,6 +32,7 @@ public class UserService {
         Role role = roleRepository.findByName(ERole.USER)
                     .orElseThrow(() -> new RuntimeException("ERROR: Role not found.")); 
 
+
         HashSet<Role> roles = new HashSet<>();
         roles.add(role);
 

@@ -49,7 +49,6 @@ public class UserController {
     
     @PostMapping("/login-service/auth/v1/signup")
     public ResponseEntity<String> signUp(@RequestBody SignupRequestDTO signupRequestDTO) {
-        System.out.println("DEBUG: " + signupRequestDTO.getEmail());
 
         User user = userService.createUser(signupRequestDTO);
         userRepository.save(user);
