@@ -1,0 +1,22 @@
+version: '3.8'
+
+name: kent-notifier
+
+services:
+  login-service:
+    build: ./services/login-service/app/
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://login-service-db:5432/kent_notifier_user_db
+    depends_on:
+      - login-service-db
+
+  login-service-db:
+    image: postgres:17-alpine 
+    ports:
+      - 5432:5432 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kent_notifier_user_db
