@@ -3,6 +3,9 @@ version: '3.8'
 name: kent-notifier
 
 services:
+
+# ------------------------------------LOGIN SERVICE AND DATABASE-----------------------------------
+
   login-service:
     build: ./services/login-service/app/
     ports:
@@ -20,3 +23,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: kent_notifier_user_db
+    volumes:
+      - login-service-vol:/var/lib/postgres/data
+
+# -----------------------------------------------------------------------------------------------------------
+
+volumes:
+  login-service-vol:
