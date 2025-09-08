@@ -30,6 +30,10 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     public User() {}
+
+    public long getId() {
+        return this.id;
+    }
     
     public void setPassword(String newPassword) {
         this.password = newPassword;

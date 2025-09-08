@@ -1,6 +1,8 @@
 package com.example.kent_notifier.app.Security.JWT;
 
 import com.example.kent_notifier.app.User.UserDetailsImpl;
+import com.example.kent_notifier.app.User.Model.User;
+import com.example.kent_notifier.app.User.Repository.UserRepository;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 
@@ -22,6 +25,9 @@ import javax.crypto.SecretKey;
 
 @Component
 public class JwtUtils {
+
+    @Autowired
+    private UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
@@ -35,13 +41,21 @@ public class JwtUtils {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         
         String jwt = Jwts.builder()
-                .subject(userPrincipal.getEmail())
+                .subject(userPrincipal.getEmail() + "|" + getUserId(userPrincipal.getEmail()))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getKey())
                 .compact();
         
         return jwt;
+    }
+
+    public Long getUserId(String email) {
+        User user = userRepository.findByEmail(email)
+                    .orElseThrow(() ->  new RuntimeException("ERROR: User was not found when trying to get thier ID."));
+
+
+        return user.getId();
     }
     
     private SecretKey getKey() {
@@ -51,12 +65,22 @@ public class JwtUtils {
     
     // grab the principals email from the JWT token to verify the user.
     public String getEmailFromJwt(String jwt) {
-        String email = Jwts.parser()
+        String subject = Jwts.parser()
                         .verifyWith(getKey()).build()
                         .parseSignedClaims(jwt)
                         .getPayload()
                         .getSubject();
+          
         
+        String email = ""; 
+        
+        // Parse the JWT token for the email
+        for (int i = 0; i < subject.length(); i++) {
+            if (subject.charAt(i) == '|') {
+                email = subject.substring(i + 1,  subject.length());
+            }
+        }
+
         return email;
     }
     public Date getExpirationTimeFromJwt(String jwt) {

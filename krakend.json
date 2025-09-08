@@ -1,0 +1,36 @@
+{
+    "version": 3,
+    "endpoints": [
+        {
+            "endpoint": "/login-service/auth/v1/signup",
+            "method": "POST",
+            "backend": [
+                {
+                    "url_pattern": "/login-service/auth/v1/signup",
+                    "method": "POST",
+                    "host": ["http://login-service:8000"]
+                }
+            ]
+        },
+
+        {
+            "endpoint": "/login-service/auth/v1/signin",
+            "method": "POST",
+            "backend": [
+                {
+                    "url_pattern": "/login-service/auth/v1/signin",
+                    "method": "POST",
+                    "host": ["http://login-service:8000"]
+                }
+            ]
+        }
+    ],
+    "extra_config": {
+        "telemetry/logging": {
+            "level": "INFO",
+            "prefix": "[KRAKEND]",
+            "syslog": false,
+            "stdout": true
+        }
+    }
+}

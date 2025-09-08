@@ -3,13 +3,12 @@ version: '3.8'
 name: kent-notifier
 
 services:
-
 # ------------------------------------LOGIN SERVICE AND DATABASE----------------------------------
 
   login-service:
     build: ./services/login-service/app/
     ports:
-      - 8080:8080
+      - 8000:8000
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://login-service-db:5432/kent_notifier_user_db
     depends_on:
@@ -25,6 +24,19 @@ services:
       POSTGRES_DB: kent_notifier_user_db
     volumes:
       - login-service-vol:/var/lib/postgres/data
+
+# ------------------------------------------------------------------------------------------------
+
+# ----------------------------------------API GATEWAY---------------------------------------------
+
+  krakend: 
+    image: krakend 
+    ports:
+      - "8080:8080" 
+    volumes:
+      - ./krakend.json:/etc/krakend/krakend.json
+    depends_on:
+      - login-service
 
 # ------------------------------------------------------------------------------------------------
 

@@ -9,9 +9,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kent_notifier.app.User.Model.User;
@@ -23,6 +23,7 @@ import com.example.kent_notifier.app.User.DTO.LoginResponseDTO;
 import com.example.kent_notifier.app.User.DTO.SignupRequestDTO;
 
 @RestController
+@RequestMapping("login-service/auth")
 public class UserController {
     
     private final UserRepository userRepository;
@@ -41,13 +42,7 @@ public class UserController {
         this.jwtUtils = jwtUtils;
     }
 
-    @GetMapping("/home")
-    public String home() {
-        System.out.println("It was called!");
-        return "Login service!";
-    }
-    
-    @PostMapping("/login-service/auth/v1/signup")
+    @PostMapping("/v1/signup")
     public ResponseEntity<String> signUp(@RequestBody SignupRequestDTO signupRequestDTO) {
 
         User user = userService.createUser(signupRequestDTO);
@@ -56,7 +51,7 @@ public class UserController {
         return new ResponseEntity<String>("User sucessfully created!", HttpStatus.CREATED); 
     }
 
-    @PostMapping("/login-service/auth/v1/signin")
+    @PostMapping("/v1/signin")
     public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginRequestDTO loginRequestDTO) {
         Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
@@ -69,11 +64,5 @@ public class UserController {
         response.setExpirationTime(jwtUtils.getExpirationTimeFromJwt(jwt).getTime());
         
         return ResponseEntity.ok(response);
-    }
-
-    // Testing 
-    @GetMapping("/login-service/user")
-    public String testUser() {
-        return "Working!";
     }
 }
