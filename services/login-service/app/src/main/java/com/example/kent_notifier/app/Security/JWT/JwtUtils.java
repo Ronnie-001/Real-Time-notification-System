@@ -11,6 +11,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 import java.nio.charset.StandardCharsets;
+
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -42,6 +43,7 @@ public class JwtUtils {
         
         String jwt = Jwts.builder()
                 .subject(userPrincipal.getEmail() + "|" + getUserId(userPrincipal.getEmail()))
+                .claims().add("ID", getUserId(userPrincipal.getEmail())).and()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getKey())
@@ -57,6 +59,7 @@ public class JwtUtils {
 
         return user.getId();
     }
+
     
     private SecretKey getKey() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
@@ -77,7 +80,7 @@ public class JwtUtils {
         // Parse the JWT token for the email
         for (int i = 0; i < subject.length(); i++) {
             if (subject.charAt(i) == '|') {
-                email = subject.substring(i + 1,  subject.length());
+                email = subject.substring(0, i);
             }
         }
 
