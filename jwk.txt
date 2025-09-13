@@ -1,0 +1,7 @@
+{
+    "kty": "oct",
+    "use": "sig",
+    "kid": "sig-1757681567",
+    "k": "0PbMvquqhqvd41ON_aJInnOYVA06V0s2QBGLYTRiZohF5sFzttmYLwBEGu3akASH17ZO2mE5tjcvBdWNPaYr4jU0---UYh-P-nvbiQL4yBDhQUf5eKQ24VS30M1AFSG9OhMMaz2rmzxVQM7GunbZvmOAnjcymAibnhCj18jfDauLawBzjI3CbPz-T6pOx47976BEhBtvjFzYqUkR9W-qFWHsgVv7AWiPzmXELN18qJWEw8C7-_Mobv-VeL-slWWR0sNvf_LMDm6PDjKeeYMIAvSvEaA4sigfF7RVUho19f9DiQp8Og8Lm6sIAKpGHoDjd8dykY4wUMuHG-WHDeJy9g",
+    "alg": "HS512"
+}

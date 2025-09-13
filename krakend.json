@@ -23,6 +23,26 @@
                     "host": ["http://login-service:8000"]
                 }
             ]
+        },
+
+        {
+            "endpoint": "/scraping-service/v1/get-login-details",
+            "method": "POST",
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS512",
+                    "jwk_local_path": "./jwk.txt",                   
+                    "audience": ["scraping", "notification"],
+                    "cache": true
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/scraping-service/v1/get-login-details",
+                    "method": "POST",
+                    "host": ["http://scraping-service:8001"]
+                }
+            ]
         }
     ],
     "extra_config": {

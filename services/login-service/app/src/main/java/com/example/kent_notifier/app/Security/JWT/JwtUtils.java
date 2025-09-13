@@ -42,8 +42,11 @@ public class JwtUtils {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         
         String jwt = Jwts.builder()
-                .subject(userPrincipal.getEmail() + "|" + getUserId(userPrincipal.getEmail()))
-                .claims().add("ID", getUserId(userPrincipal.getEmail())).and()
+                .subject(userPrincipal.getEmail())
+                .claims().add("ID", getUserId(userPrincipal.getEmail()))
+                .and()
+                .audience().add("scraping").add("notification")
+                .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getKey())
@@ -55,7 +58,6 @@ public class JwtUtils {
     public Long getUserId(String email) {
         User user = userRepository.findByEmail(email)
                     .orElseThrow(() ->  new RuntimeException("ERROR: User was not found when trying to get thier ID."));
-
 
         return user.getId();
     }

@@ -1,9 +1,10 @@
+# ---------------------BUILDER STAGE---------------------------
 FROM eclipse-temurin:21-alpine AS build
 
 # working directory for the container.
 WORKDIR /app
 
-# copy the maven project files for caching.
+# copy the maven project files for layer caching.
 COPY mvnw /app/mvnw
 COPY .mvn /app/.mvn
 COPY pom.xml /app/pom.xml
@@ -15,7 +16,7 @@ COPY src src
 
 RUN ./mvnw package -DskipTests
 
-# --------------------------------------------------------------
+# ----------------------RUNNER STAGE-------------------------
 
 FROM eclipse-temurin:21-alpine 
 
