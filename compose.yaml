@@ -28,17 +28,13 @@ services:
 # ------------------------------------------------------------------------------------------------
 
 # ----------------------------------SCRAPING SERVICE AND DATABASE---------------------------------
-
   # TODO: Finish writing this.
 
-#   scraping-service:
-#     build: ./services/scraping-service/
-#     ports:
-#       - 8001:8001
-# 
-#   scraping-service-db:
-#     image: postgres:17-alpine 
-# 
+  scraping-service:
+    build: ./services/scraping-service/
+    ports:
+      - 8001:8001
+
 # ------------------------------------------------------------------------------------------------
 
 
