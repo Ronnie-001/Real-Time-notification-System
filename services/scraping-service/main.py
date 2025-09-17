@@ -1,6 +1,7 @@
 from fastapi import FastAPI
+
 from app.routes.scrapingRouter import scrapingRouter
-from app.database.dbconn import DATABASE_URL
+from app.utils import middlewareRouter
 
 app = FastAPI()
 
@@ -9,7 +10,7 @@ app = FastAPI()
 async def root() -> str:
     return "Working!"
 
-print(DATABASE_URL)
 
 # include the different routers.
 app.include_router(scrapingRouter)
+app.include_router(middlewareRouter)
