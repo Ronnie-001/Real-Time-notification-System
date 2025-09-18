@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 
 soup = BeautifulSoup()
 
+# BCrypt used to encrypt data
 myctx = CryptContext(["bcrypt"])
 
 # function used to encrypt the users password before storing it in the database

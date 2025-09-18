@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
 from app.routes.scrapingRouter import scrapingRouter
-from app.utils import middlewareRouter
 
 app = FastAPI()
 
@@ -13,4 +12,3 @@ async def root() -> str:
 
 # include the different routers.
 app.include_router(scrapingRouter)
-app.include_router(middlewareRouter)
