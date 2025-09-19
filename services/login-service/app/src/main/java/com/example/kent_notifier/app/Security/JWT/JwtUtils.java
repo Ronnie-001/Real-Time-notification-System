@@ -80,18 +80,8 @@ public class JwtUtils {
                         .parseSignedClaims(jwt)
                         .getPayload()
                         .getSubject();
-          
         
-        String email = ""; 
-        
-        // Parse the JWT token for the email
-        for (int i = 0; i < subject.length(); i++) {
-            if (subject.charAt(i) == '|') {
-                email = subject.substring(0, i);
-            }
-        }
-
-        return email;
+        return subject;
     }
     public Date getExpirationTimeFromJwt(String jwt) {
         Date time = Jwts.parser()

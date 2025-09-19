@@ -19,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.util.StringUtils;
 
 import com.example.kent_notifier.app.User.CustomUserDetailsService;
-import com.example.kent_notifier.app.User.Repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
