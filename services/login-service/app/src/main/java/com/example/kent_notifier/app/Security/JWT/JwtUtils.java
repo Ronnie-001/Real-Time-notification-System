@@ -11,7 +11,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 import java.nio.charset.StandardCharsets;
-
+import java.util.Base64;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -69,7 +69,7 @@ public class JwtUtils {
 
     
     private SecretKey getKey() {
-        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret.getBytes());
         return Keys.hmacShaKeyFor(keyBytes);
     } 
     

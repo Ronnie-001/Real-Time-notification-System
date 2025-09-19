@@ -14,7 +14,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-scrapingRouter = APIRouter()
+routerScrape = APIRouter()
 
 # Check authorisation headers for the bearer tokens
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -30,7 +30,7 @@ ALGORITHM = "HS512"
 Send a POST request to grab the users login, so that their specific 
 timetable can be webscraped from KentVision.
 """
-@scrapingRouter.post("scraping-service/v1/get-login-details")
+@routerScrape.post("scraping-service/v1/get-login-details")
 async def grabUserLoginDetails(details: LoginDetailsModel, 
                                token: str = Depends(oauth2_scheme), 
                                db: AsyncSession = Depends(getDb)) -> str:
