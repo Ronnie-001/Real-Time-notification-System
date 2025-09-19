@@ -37,11 +37,16 @@ public class JwtUtils {
     
     @Value("${kent-notifier.login.jwtExpirationMs}")
     private int jwtExpirationMs;
+    
+    @Value("${kent-notifier.login.jwtKeyId}")
+    private String jwtKeyId;
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         
         String jwt = Jwts.builder()
+                .header().add("kid", jwtKeyId)
+                .and()
                 .subject(userPrincipal.getEmail())
                 .claims().add("ID", getUserId(userPrincipal.getEmail()))
                 .and()

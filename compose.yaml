@@ -56,8 +56,9 @@ services:
     ports:
       - "8080:8080" 
     volumes:
-      # bind the kraken.json config file to the volume.
+      # bind the kraken.json config file & the jwk.txt file to the volume.
       - ./krakend.json:/etc/krakend/krakend.json
+      - ./jwk.txt:/etc/krakend/jwk.txt
     depends_on:
       - login-service
 

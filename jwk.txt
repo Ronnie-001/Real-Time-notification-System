@@ -1,7 +1,10 @@
 {
-    "kty": "oct",
-    "use": "sig",
-    "kid": "sig-1757681567",
-    "k": "1b16ee23f38dba5fbba20b0885b0fc73371b03bca07c5ed751eba112b8a18e76a681e3ef74220935",
-    "alg": "HS512"
+    "keys": [
+        {
+            "kty": "oct",
+            "k": "1b16ee23f38dba5fbba20b0885b0fc73371b03bca07c5ed751eba112b8a18e76a681e3ef74220935",
+            "kid": "sig-1757681567",
+            "alg": "HS512"
+        }
+    ]
 }

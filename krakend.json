@@ -31,9 +31,11 @@
             "extra_config": {
                 "auth/validator": {
                     "alg": "HS512",
-                    "jwk_local_path": "./jwk.txt",                   
+                    "jwk_local_path": "./jwk.txt", 
                     "audience": ["scraping", "notification"],
-                    "cache": true
+                    "operation_debug": true,
+                    "disable_jwk_security": true,
+                    "cache": false
                 }
             },
             "backend": [
