@@ -28,6 +28,9 @@
         {
             "endpoint": "/scraping-service/v1/get-login-details",
             "method": "POST",
+            "input_headers": [
+                "Authorization"
+            ],
             "extra_config": {
                 "auth/validator": {
                     "alg": "HS512",

@@ -70,6 +70,10 @@ public class JwtUtils {
     
     private SecretKey getKey() {
         byte[] keyBytes = Base64.getDecoder().decode(jwtSecret.getBytes());
+
+        String str = new String(keyBytes);
+        System.out.println("DECODED KEY ---> " + str);
+
         return Keys.hmacShaKeyFor(keyBytes);
     } 
     

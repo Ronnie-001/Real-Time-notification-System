@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from typing import Annotated
+from fastapi import APIRouter, Depends, Header
 from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
@@ -14,7 +15,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-routerScrape = APIRouter()
+detailsRouter = APIRouter()
 
 # Check authorisation headers for the bearer tokens
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -30,27 +31,28 @@ ALGORITHM = "HS512"
 Send a POST request to grab the users login, so that their specific 
 timetable can be webscraped from KentVision.
 """
-@routerScrape.post("scraping-service/v1/get-login-details")
+@detailsRouter.post("/scraping-service/v1/get-login-details")
 async def grabUserLoginDetails(details: LoginDetailsModel, 
-                               token: str = Depends(oauth2_scheme), 
-                               db: AsyncSession = Depends(getDb)) -> str:
-
+                               Authorization: Annotated[str | None, Header()] = None,
+                               db: AsyncSession = Depends(getDb)):
+    
+    # throw an exception if no authorisation headers are found
     jwt_exception = HTTPException(
         status_code=401,
         detail="Could not extract the JWT token from authorisation headers",
         headers={"WWW-Authenticate" : "Bearer"},
     )
     
-    # decode the JWT token and retrieve the user's ID.
-    try:
-        payload = jwt.decode(token, SECRET_KEY, ALGORITHM) 
-        users_id = payload.get("ID")
-        if users_id is None:
-            raise jwt_exception
-    except jwt.InvalidTokenError:
+    # check if the Auth header was recieved.
+    if Authorization is None:
         raise jwt_exception
-    
-    # add a new user into the database
+
+    """
+    Parse the jwt for the users ID. Don't need to worry about validating the JWT since
+    JWT validaion is handled with the KrakenD API gateway
+    """
+
+    # add a new user into the database, accociate the user's ID with their KentVision details.
     user_details = data.Data (
         user_id = users_id,
         email = details.email,
@@ -61,4 +63,4 @@ async def grabUserLoginDetails(details: LoginDetailsModel,
     await db.commit()
     await db.refresh(user_details)
 
-    return "Login details added to the database!" 
+    return {"detailsP": details.password, "detailsE" : details.email, "Auth": Authorization}
