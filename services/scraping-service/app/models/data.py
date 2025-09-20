@@ -1,8 +1,5 @@
+from app.database.dbconn import Base
 from sqlalchemy import Column, Date, Integer, String
-from sqlalchemy.orm import DeclarativeBase
-
-class Base(DeclarativeBase):
-    pass
 
 class Data(Base):
     __tablename__ = "monitored_users"

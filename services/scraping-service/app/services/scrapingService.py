@@ -1,14 +1,16 @@
 from bs4 import BeautifulSoup
-from passlib.context import CryptContext
+import bcrypt
 
 soup = BeautifulSoup()
 
-# BCrypt used to encrypt data
-myctx = CryptContext(["bcrypt"])
+# function used to encrypt the users password before storing it in the database.
+async def encryptPassword(password: str) -> bytes:
+    pwd_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
+    return hashed_password
 
-# function used to encrypt the users password before storing it in the database
-async def encryptPassword(password: str) -> str:
-    return myctx.hash(password)
-
-def verifyPassword(passwordHash: str, plainPassword: str) -> bool:
-    return myctx.verify(passwordHash, plainPassword)
+# function used to check if the provided password matches the hashed password.
+def verifyPassword(passwordHash, plainPassword) -> bool:
+    password_byte_enc = plainPassword.encode('utf-8')
+    return bcrypt.checkpw(password= password_byte_enc, hashed_password = passwordHash)

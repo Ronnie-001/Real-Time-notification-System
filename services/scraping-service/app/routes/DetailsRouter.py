@@ -1,7 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, Header
 from fastapi.exceptions import HTTPException
-from fastapi.security import OAuth2PasswordBearer
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,21 +10,14 @@ from app.services.userDetailsSchema import LoginDetailsModel
 from app.dependencies import getDb
 
 import jwt
-import os 
 from dotenv import load_dotenv
 from pathlib import Path
 
 detailsRouter = APIRouter()
 
-# Check authorisation headers for the bearer tokens
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 # Load the secret key from the .env file
 env_path = Path(__file__).parent / '.env'
 load_dotenv(dotenv_path=env_path)
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = "HS512" 
 
 """
 Send a POST request to grab the users login, so that their specific 
@@ -39,7 +31,7 @@ async def grabUserLoginDetails(details: LoginDetailsModel,
     # throw an exception if no authorisation headers are found
     jwt_exception = HTTPException(
         status_code=401,
-        detail="Could not extract the JWT token from authorisation headers",
+        detail="Could not extract the JWT token from 'Authorization' header.",
         headers={"WWW-Authenticate" : "Bearer"},
     )
     
@@ -57,16 +49,22 @@ async def grabUserLoginDetails(details: LoginDetailsModel,
 
     # Grab the users ID from the decoded payload.
     users_id = decodedToken["ID"]
-
-    # add a new user into the database, accociate the user's ID with their KentVision details.
-#     user_details = data.Data (
-#         user_id = users_id,
-#         email = details.email,
-#         password = await encryptPassword(details.password),
-#     )
-#     
-#     db.add(user_details)
-#     await db.commit()
-#     await db.refresh(user_details)
     
+    # add a new user into the database, accociate the user's ID with their KentVision details.
+    user_details = data.Data (
+    user_id = users_id,
+    email = details.email,
+    password = await encryptPassword(details.password),
+    )
+    
+    db.add(user_details)
+    await db.commit()
+    await db.refresh(user_details)
+
     return {"Token": token, "UserID" : users_id}
+
+#     except Exception as e:
+#         await db.rollback()
+#         raise HTTPException(
+#                 status_code=500, 
+#                 detail=f"Error when adding a user to the PostgreSQL database: {str(e)}")

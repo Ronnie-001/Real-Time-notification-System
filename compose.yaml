@@ -33,13 +33,15 @@ services:
     build: ./services/scraping-service/
     ports:
       - 8001:8001
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@scraping-service-db:5432/kent_notifier_scraping_db
     depends_on:
       - scraping-service-db
 
   scraping-service-db:
     image: postgres:17-alpine
     ports:
-      - 5433:5433
+      - 5433:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -61,6 +63,7 @@ services:
       - ./jwk.txt:/etc/krakend/jwk.txt
     depends_on:
       - login-service
+      - scraping-service
 
 # ------------------------------------------------------------------------------------------------
 
