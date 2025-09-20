@@ -49,18 +49,24 @@ async def grabUserLoginDetails(details: LoginDetailsModel,
 
     """
     Parse the jwt for the users ID. Don't need to worry about validating the JWT since
-    JWT validaion is handled with the KrakenD API gateway
+    JWT validaion is handled using the KrakenD API gateway.
     """
+    authHeader = Authorization.split(" ")    
+    token = authHeader[1]
+    decodedToken = jwt.decode(token, options={"verify_signature": False})
+
+    # Grab the users ID from the decoded payload.
+    users_id = decodedToken["ID"]
 
     # add a new user into the database, accociate the user's ID with their KentVision details.
-    user_details = data.Data (
-        user_id = users_id,
-        email = details.email,
-        password = await encryptPassword(details.password),
-    )
+#     user_details = data.Data (
+#         user_id = users_id,
+#         email = details.email,
+#         password = await encryptPassword(details.password),
+#     )
+#     
+#     db.add(user_details)
+#     await db.commit()
+#     await db.refresh(user_details)
     
-    db.add(user_details)
-    await db.commit()
-    await db.refresh(user_details)
-
-    return {"detailsP": details.password, "detailsE" : details.email, "Auth": Authorization}
+    return {"Token": token, "UserID" : users_id}
