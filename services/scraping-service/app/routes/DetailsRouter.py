@@ -55,10 +55,5 @@ async def grabUserLoginDetails(details: LoginDetailsModel,
     await db.commit()
     await db.refresh(user_details)
 
-    return {"Token": token, "UserID" : users_id}
+    return {"Email": details.email, "UserID" : users_id}
 
-#     except Exception as e:
-#         await db.rollback()
-#         raise HTTPException(
-#                 status_code=500, 
-#                 detail=f"Error when adding a user to the PostgreSQL database: {str(e)}")
