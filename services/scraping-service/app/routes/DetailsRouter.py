@@ -10,14 +10,8 @@ from app.services.userDetailsSchema import LoginDetailsModel
 from app.dependencies import getDb
 
 import jwt
-from dotenv import load_dotenv
-from pathlib import Path
 
 detailsRouter = APIRouter()
-
-# Load the secret key from the .env file
-env_path = Path(__file__).parent / '.env'
-load_dotenv(dotenv_path=env_path)
 
 """
 Send a POST request to grab the users login, so that their specific 

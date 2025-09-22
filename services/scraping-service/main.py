@@ -1,8 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
-
 from app.routes import DetailsRouter
+from app.database.dbconn import Base, engine
 
-app = FastAPI()
+
+# Bind all the tables to the engine so that the tables will be created.
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+    
+    print("Application stopping!")
+    
+
+app = FastAPI(lifespan=lifespan)
 
 # include the different routers.
 app.include_router(DetailsRouter.detailsRouter)

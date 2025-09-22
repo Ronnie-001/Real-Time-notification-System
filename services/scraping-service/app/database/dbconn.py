@@ -1,14 +1,6 @@
 import os
-from dotenv import load_dotenv
-from pathlib import Path
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
-
-# get the specific path to the .env file
-env_path = Path(__file__).parent / '.env'
-
-# load the .env file
-load_dotenv(dotenv_path=env_path, override=True)
 
 # get the database url from the .env file
 DATABASE_URL = os.getenv("DATABASE_URL")

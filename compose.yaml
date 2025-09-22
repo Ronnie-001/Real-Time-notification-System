@@ -9,8 +9,10 @@ services:
     build: ./services/login-service/app/
     ports:
       - 8000:8000
+    env_file:
+      - "./.env"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://login-service-db:5432/kent_notifier_user_db
+      SPRING_DATASOURCE_URL: ${USER_DB_CONN_STRING}
     depends_on:
       - login-service-db
 
@@ -19,35 +21,47 @@ services:
     ports:
       - 5432:5432 
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: kent_notifier_user_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_USER_DB}
     volumes:
       - login-service-vol:/var/lib/postgres/data
 
 # ------------------------------------------------------------------------------------------------
 
 # ----------------------------------SCRAPING SERVICE AND DATABASE---------------------------------
-
   scraping-service:
     build: ./services/scraping-service/
     ports:
       - 8001:8001
+    env_file:
+        - "./.env"
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@scraping-service-db:5432/kent_notifier_scraping_db
+      DATABASE_URL: ${SCRAPING_DB_CONN_STRING}
     depends_on:
-      - scraping-service-db
+      scraping-service-db:
+        condition: service_healthy
+        restart: true
 
   scraping-service-db:
     image: postgres:17-alpine
     ports:
       - 5433:5432
+    env_file:
+      - "./.env"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: kent_notifier_scraping_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_SCRAPING_DB}
     volumes:
       - scraping-service-vol:/var/lib/postgres/data
+    # Perform healthcheck on the PostgresSQL database to make sure we can connect to in within our service.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_SCRAPING_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
 # ------------------------------------------------------------------------------------------------
 
