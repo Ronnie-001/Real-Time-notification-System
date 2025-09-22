@@ -15,6 +15,7 @@ async def verifyPassword(passwordHash, plainPassword) -> bool:
     password_byte_enc = plainPassword.encode('utf-8')
     return bcrypt.checkpw(password= password_byte_enc, hashed_password = passwordHash)
 
+# TODO: Implement the parsing of the JWT in a separate functions.
 async def getEmailFromJwt(jwt: str) -> str:
     return ""
 
